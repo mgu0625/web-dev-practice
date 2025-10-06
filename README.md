@@ -22,7 +22,11 @@ This space is where I document my journey into web development and Java programm
 ### ☕ Java
 - Syntax and basic programs
 - Object-Oriented Programming (OOP) concepts
-- Loops, conditionals, classes, and more
+- focused on working with Three.js
+
+Exercises done inside NodeAndThreeJS_Projects file were using Bruno Simon's tutorials (10/10 recommend!!)
+- https://threejs-journey.com/
+
 
 ## ✍️ Why This Repo?
 
