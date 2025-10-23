@@ -396,7 +396,6 @@ ghost3.shadow.camera.far = 10
 const sky = new Sky()
 sky.scale.set(100, 100, 100)
 scene.add(sky)
-
 sky.material.uniforms['turbidity'].value = 10
 sky.material.uniforms['rayleigh'].value = 3
 sky.material.uniforms['mieCoefficient'].value = 0.1
