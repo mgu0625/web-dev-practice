@@ -1,0 +1,29 @@
+cancel
+exit
+# macOS
+.DS_Store
+
+# Node
+node_modules/
+dist/
+build/
+.npm/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+.env
+.venv/
+venv/
+
+# Editors
+.vscode/
+.idea/
+
+
+# Ignore large videos
+*.mov
+*.MOV
