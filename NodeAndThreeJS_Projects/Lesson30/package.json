@@ -6,7 +6,6 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "devDe
   "devDependencies": {
     "vite": "^6.2.2",
     "vite-plugin-restart": "^0.4.2",
