@@ -11,5 +11,5 @@
     "build": "vite build",
     "preview": "vite preview --host"
   },
-  "engines": { "node": ">=18" }
+  "engines": { "node": ">=3" }
 }
