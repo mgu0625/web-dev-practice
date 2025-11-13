@@ -1,22 +1,28 @@
 // vite.config.js (repo root)
-import { resolve, join } from 'path'
+import { join, resolve } from 'path'
 import fs from 'fs'
 import glsl from 'vite-plugin-glsl'
 
 const LESSONS_ROOT = 'NodeAndThreeJS_Projects'
 
-function discoverLessonHtmlInputs() {
-  const abs = join(process.cwd(), LESSONS_ROOT)
-  if (!fs.existsSync(abs)) return []
+function discoverLessonInputs() {
+  const absRoot = join(process.cwd(), LESSONS_ROOT)
+  const inputs = {}
 
-  return fs
-    .readdirSync(abs, { withFileTypes: true })
-    .filter(d => d.isDirectory() && /^Lesson\d+$/i.test(d.name))
-    .map(d => {
-      const html = join(abs, d.name, 'index.html')
-      return fs.existsSync(html) ? resolve(html) : null
-    })
-    .filter(Boolean)
+  if (!fs.existsSync(absRoot)) return inputs
+
+  for (const d of fs.readdirSync(absRoot, { withFileTypes: true })) {
+    if (!d.isDirectory()) continue
+    if (!/^Lesson\d+$/i.test(d.name)) continue
+
+    const html = join(absRoot, d.name, 'src', 'index.html')
+    if (fs.existsSync(html)) {
+      // Use a key that preserves folders in dist/
+      const key = `${LESSONS_ROOT}/${d.name}/src/index`
+      inputs[key] = resolve(html)
+    }
+  }
+  return inputs
 }
 
 export default {
@@ -25,7 +31,14 @@ export default {
     outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
-      input: discoverLessonHtmlInputs()
+      const: 0, // placeholder to avoid trailing comma issues in some editors
+      input: (() => {
+        const i = discoverLessonInputs()
+        if (Object.keys(i).length) return i
+        throw new Error(
+          `No entries found. Expected ${LESSONS_ROOT}/LessonXX/src/index.html`
+        )
+      })()
     }
   }
 }
