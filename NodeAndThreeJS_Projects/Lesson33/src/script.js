@@ -2,6 +2,10 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import GUI from 'lil-gui'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
+import holographicVertexShader from './shaders/holographic/vertex.glsl'
+import holographicFragmentShader from './shaders/holographic/fragment.glsl'
+// console.log(holographicVertexShader)
+// console.log(holographicFragmentShader)
 
 /**
  * Base
@@ -77,7 +81,29 @@ gui
 /**
  * Material
  */
-const material = new THREE.MeshBasicMaterial()
+const materialParameters = {}
+materialParameters.color = '#f6b6bb'
+
+const material = new THREE.ShaderMaterial({
+    vertexShader: holographicVertexShader,
+    fragmentShader: holographicFragmentShader,
+    uniforms:
+    {
+        uTime: new THREE.Uniform(0),
+        uColor: new THREE.Uniform(new THREE.Color(materialParameters.color)),
+    },
+    transparent: true,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending
+})
+
+gui
+    .addColor(materialParameters, 'color')
+    .onChange(() =>
+    {
+        material.uniforms.uColor.value.set(materialParameters.color)
+    })
 
 /**
  * Objects
@@ -135,6 +161,9 @@ const tick = () =>
 
     torusKnot.rotation.x = - elapsedTime * 0.1
     torusKnot.rotation.y = elapsedTime * 0.2
+
+    // Update material
+    material.uniforms.uTime.value = elapsedTime
 
     // Update controls
     controls.update()
