@@ -85,9 +85,16 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
 // Blur image
 void blur(int height, int width, RGBTRIPLE image[height][width])
 {
-    // declare image variable
-    RGBTRIPLE temp[height][width];
-
+    // create copy of image
+    RGBTRIPE copy[height][width];
+    for (int i = 0; i < height; i ++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            copy[i][j] = image[i][j];
+        }
+    }
+    // blur each pixel using copy
     // loop through rows
     for (int row = 0; row < height; row++)
     {
