@@ -72,7 +72,7 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
         for (int column = 0; column < width / 2; column++)
         {
             // store the left column in a temporary variable;
-            RBTRIPLE temp = image[row][column];
+            RGBTRIPLE temp = image[row][column];
 
             // move to right column in the left spot
             image[row][column] = image[row][width - column - 1];
@@ -80,13 +80,14 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
             // move to left column in the right spot
             image[row][width - column - 1] = temp;
         }
+    }
 }
 
 // Blur image
 void blur(int height, int width, RGBTRIPLE image[height][width])
 {
     // create copy of image
-    RGBTRIPE copy[height][width];
+    RGBTRIPLE copy[height][width];
     for (int i = 0; i < height; i ++)
     {
         for (int j = 0; j < width; j++)
@@ -100,11 +101,42 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
     {
         for (int column = 0; column < width; column++)
         {
-            // duplicate original image
-            temp[row][column] = image[row][column];
-        }
-    }
+            // initialize variables
+            int sumRed = 0;
+            int sumGreen = 0;
+            int sumBlue = 0;
 
-    
+            int counter = 0;
+
+            // loop through surrounding pixels for each pixel 
+            //for 3x3 grid
+            for (int di = -1; di < 2; di++)
+            {
+                for (int dj = -1; dj < 2; dj++)
+                {
+                    int ni = row + di;
+                    int nj = column + dj;
+
+                    // skip neighbors that are out of bounds
+                    if (ni < 0 || ni >= height || nj < 0 || nj >= width)
+                    {
+                        continue;
+                    }
+
+                    // add to the sum
+                    sumRed += copy[ni][nj].rgbtRed;
+                    sumGreen += copy[ni][nj].rgbtGreen;
+                    sumBlue += copy[ni][nj].rgbtBlue;
+
+                    counter ++;
+                }
+            }
+
+            // add blur effect to original image
+            image[row][column].rgbtRed = (int) round((float) sumRed / counter);
+            image[row][column].rgbtGreen = (int) round((float) sumGreen / counter);
+            image[row][column].rgbtBlue = (int) round((float) sumBlue / counter);
+        }
+    } 
 
 }
